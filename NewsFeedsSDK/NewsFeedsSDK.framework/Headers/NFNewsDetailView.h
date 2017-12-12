@@ -180,11 +180,11 @@
  *  @abstract
  *  详情页面的分享按钮点击
  *
- *  @param detailView       当前的NFArticleDetailView实例
+ *  @param detailView       当前的NFNewsDetailView实例
  *  @param detail           当前正在看的新闻详情
  *  @param type             分享类型，0：微信好友  1：朋友圈
  */
-- (void)onWebShareClick:(NFNewsDetail *)detailView
+- (void)onWebShareClick:(NFNewsDetailView *)detailView
              newsDetail:(NFNewsDetail *)detail
                    type:(NSInteger)type;
 

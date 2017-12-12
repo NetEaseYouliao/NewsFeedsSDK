@@ -12,7 +12,6 @@
 #import "NFNewsDetail.h"
 #import "NFNewsDetailView.h"
 #import "NFTracker.h"
-#import "NSObject+NFModel.h"
 #import "GeTuiSdk.h"
 
 typedef NS_ENUM(NSInteger, NFSDKSNSType) {
@@ -30,7 +29,7 @@ typedef NS_ENUM(NSInteger, NFSDKMaxLogLevel) {
 
 typedef void (^NFLoadNewsBlock)(NFNews *newsList, NSError *error);
 typedef void (^NFLoadImageBlock)(UIImage *image, NSError *error);
-typedef void (^NFWebCachedImageBlock)();
+typedef void (^NFWebCachedImageBlock)(void);
 
 /**
  * @class
