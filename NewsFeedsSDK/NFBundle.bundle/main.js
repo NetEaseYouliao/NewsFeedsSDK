@@ -77,8 +77,16 @@ function initLoadData(data) {
     baseUrl = data.networkConfg;
     httpsOn = data.httpsOn;
     
-    showShare=data.showShare;// 分享显示 控制
+    showControl = data.showControl || {};
+    
     formatTime();
+    
+    if (!showControl.showRelated) {
+        newsDetail.render();
+        newsDetail.bindEvent();
+        return;
+    }
+    
     getRelatedData();
 }
 
@@ -367,11 +375,8 @@ NewsDetail.prototype = {
         
         $("li.item").each(function(i,item) {
                      $(item).get(0).ontouchstart=function(e){
-                          debugger
-                        $(this).css("background","#f9f9f9");
                      };
                      $(item).get(0).ontouchend=function(){
-                        $(this).css("background","white");
                      };
                      });
         
@@ -547,8 +552,22 @@ NewsDetail.prototype = {
         var defaultImgSrc = plat == "ios" ? "transparent.png" : "file:///android_asset/default/transparent.png";
         var imgs = newsData.imgs;
         var containerWidth = $(".content").width();
-        if (!showShare) {
-          $('.share').hide();
+       
+        if(!showControl.showRelated){
+            $('.related').hide();
+        }
+        
+        //微信分享 显示控制
+        var platform = showControl.platform || [];
+        if (platform.indexOf(0) == -1 && platform.indexOf(1) == -1) {
+            $('.share').hide();
+        } else {
+            if (platform.indexOf(0) == -1) {
+                $('.webchat').hide()
+            }
+            if (platform.indexOf(1) == -1) {
+                $('.friends').hide()
+            }
         }
 
         $(".content").html(content.replace(/\$\{\{(\d+)\}\}\$/g, function(match, p1) {

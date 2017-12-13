@@ -10,9 +10,10 @@
 #import "NFChannel.h"
 #import "NFNews.h"
 #import "NFNewsDetail.h"
-#import "NFNewsDetailView.h"
 #import "NFTracker.h"
 #import "GeTuiSdk.h"
+#import <UIKit/UIKit.h>
+#import "NSObject+NFModel.h"
 
 typedef NS_ENUM(NSInteger, NFSDKSNSType) {
     NFSDKSNSTypeWXSession = 0, //微信会话
@@ -28,8 +29,7 @@ typedef NS_ENUM(NSInteger, NFSDKMaxLogLevel) {
 };
 
 typedef void (^NFLoadNewsBlock)(NFNews *newsList, NSError *error);
-typedef void (^NFLoadImageBlock)(UIImage *image, NSError *error);
-typedef void (^NFWebCachedImageBlock)(void);
+typedef void (^NFDeleteCacheBlock)(void);
 
 /**
  * @class
@@ -114,12 +114,13 @@ typedef void (^NFWebCachedImageBlock)(void);
  *  @method
  *
  *  @abstract
- *  设置正文缓存的开启状态
+ *  设置缓存的开启状态
  *
  *  @param enabled  缓存开启状态，默认YES
  *
  *  @discussion
  *  默认开启状态
+ *  注意：若用户同时使用UI SDK，强烈不建议用户关闭缓存
  */
 - (void)setCacheEnabled:(BOOL)enabled;
 
@@ -127,14 +128,40 @@ typedef void (^NFWebCachedImageBlock)(void);
  *  @method
  *
  *  @abstract
- *  配置新闻详情页面最大缓存时长
+ *  配置最大缓存时长
  *
- *  @param maxCachedTime  最大缓存时长，单位秒，默认7*24*60*60，即一周
+ *  @param maxCachedTime  最大缓存时长，单位秒，默认24*60*60，即一天
  *
  *  @discussion
- *  清除缓存的时机：退到后台或者进程杀死的时候
+ *  清除过期缓存的时机：SDK初始化的时候以及进程杀死的时候
  */
 - (void)setMaxCachedTime:(NSInteger)maxCachedTime;
+
+/**
+ *  @method
+ *
+ *  @abstract
+ *  配置每个频道最大缓存新闻数量
+ *
+ *  @param maxCachedNum  最大缓存新闻数量，默认60条
+ *
+ *  @discussion
+ *  清除多余缓存数目的时机：SDK初始化的时候
+ */
+- (void)setMaxCachedNum:(NSInteger)maxCachedNum;
+
+/**
+ *  @method
+ *
+ *  @abstract
+ *  配置自动刷新时间间隔
+ *
+ *  @param autoRefreshTime  自动刷新时间间隔，单位是秒
+ *
+ *  @discussion
+ *  清除多余缓存数目的时机：SDK初始化的时候
+ */
+- (void)setAutoRefreshTime:(NSTimeInterval)autoRefreshTime;
 
 /**
  *  @method
@@ -304,24 +331,6 @@ typedef void (^NFWebCachedImageBlock)(void);
 /**
  *  @method
  *
- *  @abstract
- *  获取新闻详情中url对应的图片
- *
- *  @param url    待加载图片的url
- *  @param block  返回的结果，可以在block中处理自己的业务逻辑
- *
- *  @discussion
- *  SDK本身会对新闻详情加载的图片做缓存，用户调用该接口可以获取已经缓存的图片
- *  防止使用第三方图片库会再对图片进行缓存，造成不必要的缓存空间浪费
- *
- *  若用户需要对详情页面的图片进行操作处理，当调用 NFNewsDetailView类的detailView:didClickImageArray:atIndex:方法时，
- *  建议用户使用该接口获取SDK的缓存图片
- */
-- (void)loadImageWithUrl:(NSString *)url block:(NFLoadImageBlock)block;
-
-/**
- *  @method
- *
  *  广告数据渲染曝光调用的方法
  *  
  *  @param adInfo 广告渲染的adInfo
@@ -352,11 +361,40 @@ typedef void (^NFWebCachedImageBlock)(void);
  *  删除过期的新闻
  *
  *  @param channelId  待删除的频道
+ *  @param completeBlock  删除完成的回调
  *
  *  @discussion
- *  提供删除过期缓存的调用接口，会同时删除过期的新闻
+ *  提供删除过期缓存的调用接口
  */
-- (void)deleteOldCachedNews:(NSString *)channelId;
+- (void)deleteExpireCachedNews:(NSString *)channelId
+                      complete:(NFDeleteCacheBlock)completeBlock;
+
+/**
+ *  @method
+ *
+ *  @abstract
+ *  删除所有缓存的新闻
+ *
+ *  @param completeBlock  删除完成的回调
+ *
+ *  @discussion
+ *  completeBlock中实现刷新UI的操作
+ */
+- (void)deleteAllCachedNews:(NFDeleteCacheBlock)completeBlock;
+
+/**
+ *  @method
+ *
+ *  @abstract
+ *  计算缓存的大小，
+ *
+ *  @return
+ *  缓存的大小，单位KB
+ *
+ *  @discussion
+ *  缓存较大的时候时候计算时间较长
+ */
+- (float)cacheSize;
 
 /**
  *  @method
@@ -424,43 +462,4 @@ typedef void (^NFWebCachedImageBlock)(void);
 - (void)hasRead:(NSString *)infoId
           block:(void(^)(BOOL hasRead))block;
 
-/**
- *  @method
- *
- *  @abstract
- *  清除某一条新闻的正文缓存
- *
- *  @param infoId    新闻Id
- *  @param block     删除完成后的回调
- *
- *  @discussion
- *  会同时删除正文的缓存和正文图片的缓存
- */
-- (void)removeCachedDetail:(NSString *)infoId block:(NFWebCachedImageBlock)block;
-
-/**
- *  @method
- *
- *  @abstract
- *  清除所有的正文缓存
- *
- *  @param block  删除完成后的回调
- *
- *  @discussion
- *  会同时清除所有的正文缓存和正文图片的缓存
- */
-- (void)clearCachedDetails:(NFWebCachedImageBlock)block;
-
-/**
- *  @method
- *
- *  @abstract
- *  删除过期的缓存
- *
- *  @param block  删除完成后的回调
- *
- *  @discussion
- *  提供删除过期缓存的调用接口，会同时删除过期的正文缓存和正文图片
- */
-- (void)removeOldCachedDetails:(NFWebCachedImageBlock)block;
 @end

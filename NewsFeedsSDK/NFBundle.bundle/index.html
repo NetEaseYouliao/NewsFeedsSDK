@@ -11,7 +11,9 @@
     <title>Angel</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" type="text/css" href="pnotify.custom.min.css">
-
+    <style type="text/css" id="custom-css">
+        <--customcss-->
+    </style>
 </head>
 
 <body class="ff-a ios-device">
@@ -37,26 +39,24 @@
                         <span class="btn">报错</span>
                     </p>
                 </div>
-
-                <div class="ad">
-                </div>
-
+        </section>
+        <section class="ad">
         </section>
         <section class="share">
+            <div class="shareHeader">
+                <span class="title">分享</span>
+            </div>
             <div class="shareWrap">
                 <div class="webchat">
                     <a href="javascript:;" id="webchat">
-                        <img src="details_icon_wechat_normal@2x.png"  height="60" width="60" alt="">
-                    </a>
+                        <img src="details_icon_wechat_normal@2x.png" height="60" width="60" alt="">
+                            </a>
                     <span>微信好友</span>
-                </div>
-                <div class="shareHeader">
-                    <span class="title">分享</span>
                 </div>
                 <div class="friends">
                     <a href="javascript:;" id="friends">
-                        <img src="details_icon_friends_normal@2x.png"  height="60" width="60" alt="">
-                    </a>
+                        <img src="details_icon_friends_normal@2x.png" height="60" width="60" alt="">
+                            </a>
                     <span>朋友圈</span>
                 </div>
             </div>
@@ -147,14 +147,13 @@
             height: 160px;
             flex-direction: row;
             align-items: center;
-            border-top: 1px solid #f1f4f7;
-            border-bottom: 1px solid #f1f4f7;
             position: relative;
+            justify-content: center;
         }
 
         .webchat,
         .friends {
-            flex: 1;
+            margin: 0 40px;
         }
 
         .webchat>a,
@@ -197,17 +196,28 @@
         }
 
         .shareHeader {
-            flex: 0 0 80px;
-        }
-
-        .shareHeader>.title {
-            position: absolute;
-            line-height: 32px;
-            top: -16px;
-            left: calc(50% - 40px);
-            width: 80px;
-            background: #fff;
+            position: relative;
             text-align: center;
+            /* display: inline-block;
+             background: #fff; */
+        }
+    
+        .shareHeader::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            display: block;
+            width: 100%;
+            border-top: 1px solid #F1F4F7;
+            z-index: -1;
+        }
+    
+        .shareHeader>.title {
+            line-height: 32px;
+            display: inline-block;
+            width: 80px;
+            font-size: 14px;
+            background: #fff;
         }
     </style>
 
@@ -477,6 +487,11 @@
         .demo--radio:checked + .demo--radioInput:after{background-color:#0099fb;border-radius:100%;content:"";display:inline-block;height:12px;margin:1px;width:12px}
         .demo--checkbox.demo--radioInput,.demo--radio:checked + .demo--checkbox.demo--radioInput:after{border-radius:0}
     </style>
+    
+    <style type="text/css" id="custom-css">
+        <--customcss-->
+    </style>
+    
     <script id="adTMPL" type="text/html">
         <div class="adwrapper">
             <div class="adcontainer">

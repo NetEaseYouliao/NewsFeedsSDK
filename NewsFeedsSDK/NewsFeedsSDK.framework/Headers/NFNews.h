@@ -85,6 +85,9 @@
  */
 @interface NFAdInfo : NSObject
 
+//广告位类型：0代表新闻列表  1代表轮播图  2代表新闻详情
+@property (nonatomic, assign) NSInteger adType;
+
 //应用ID
 @property (nonatomic, copy)   NSString *mediumId;
 
