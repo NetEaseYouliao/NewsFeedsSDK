@@ -17,7 +17,7 @@
   s.ios.deployment_target = "9.0"
 
   s.frameworks = 'AdSupport', 'CoreLocation', 'StoreKit', 'SafariServices'
-
+  s.libraries = 'sqlite3', 'z'
   s.dependency 'GTSDK'
   s.dependency 'YLGDTMobSDK'
 
