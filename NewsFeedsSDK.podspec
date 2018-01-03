@@ -12,7 +12,6 @@
   s.requires_arc = true
   s.platform     = :ios
   s.vendored_frameworks ='NewsFeedsSDK.framework'
-  s.resource     = 'NFBundle.bundle'
 
   s.ios.deployment_target = "9.0"
 
