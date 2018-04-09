@@ -12,6 +12,10 @@ NewsFeedsSDK提供的功能如下：
 - 用户行为采集上传
 
 # 版本更新记录
+## v1.7.0
+- 行为上报时，将channelId修改为tag
+- infoType新增svideo类型，表示短视频
+
 ## v1.6.0
 - 取消广告
 - 使用channelTag进行频道定位
