@@ -1,6 +1,6 @@
  Pod::Spec.new do |s|
   s.name         = 'NewsFeedsSDK'
-  s.version      = '1.9.3'
+  s.version      = '1.9.4'
   s.summary      = "网易有料iOS SDK"
   s.description  = <<-DESC
                    网易有料iOS SDK，提供获取有料资讯数据
@@ -12,12 +12,16 @@
   s.requires_arc = true
   s.platform     = :ios
   s.vendored_frameworks ='NewsFeedsSDK.framework'
+  s.static_framework = true
 
   s.ios.deployment_target = "8.0"
 
-  s.frameworks = 'AdSupport', 'CoreLocation', 'StoreKit', 'SafariServices'
-  s.libraries = 'sqlite3', 'z'
-  s.dependency 'GTSDK'
+  s.frameworks = 'AdSupport', 'CoreLocation' , 'MobileCoreServices', 'StoreKit', 'SafariServices', 'SystemConfiguration', 'CoreTelephony'
+
+  s.weak_frameworks = 'UserNotifications', 'CoreFoundation'
+
+  s.libraries = 'sqlite3', 'z', 'xml2'
+
   s.dependency 'YLGDTMobSDK'
 
 end
