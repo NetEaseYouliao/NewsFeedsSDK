@@ -11,7 +11,7 @@
   s.source       = { :http => "https://github.com/NetEaseYouliao/NewsFeedsSDK/raw/master/NewsFeedsSDK/NewsFeedsSDK-#{s.version}.zip" }
   s.requires_arc = true
   s.platform     = :ios
-  s.vendored_frameworks ='NewsFeedsSDK.framework'
+  s.vendored_frameworks = 'NewsFeedsSDK/NewsFeedsSDK.framework'
   s.static_framework = true
 
   s.ios.deployment_target = "8.0"
