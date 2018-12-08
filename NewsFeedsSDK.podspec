@@ -1,6 +1,6 @@
  Pod::Spec.new do |s|
   s.name         = 'NewsFeedsSDK'
-  s.version      = '1.9.6'
+  s.version      = '1.9.7'
   s.summary      = "网易有料iOS SDK"
   s.description  = <<-DESC
                    网易有料iOS SDK，提供获取有料资讯数据
